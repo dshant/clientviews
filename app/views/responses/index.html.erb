@@ -1,0 +1,65 @@
+<%= content_for :header_content do %>
+  <h5>Conversations</h5>
+<% end %>
+
+<div class="row">
+                            <div class="col-12">
+                                <!-- Left sidebar -->
+                                <div class="email-leftbar card" style="padding-top: 0;">
+                                    <h5 class="card-header bg-transparent border-bottom text-uppercase ">Folders</h5>
+                                    <div class="mail-list mt-4">
+                                        <a href="?" class="<%= 'active' if params[:view].blank? && params[:tag].blank? %>"><i class="fal fa-envelope"></i> Inbox</a>
+                                        <a href="?view=conversations" class="<%= 'active' if params[:view] == 'conversations' %>"><i class="fal fa-mail-bulk"></i> Conversations</a>
+                                        <a href="?view=no_info"><i class="fal fa-comment-slash"></i> No Contact Information</a>
+                                    </div>
+                                    <h6 class="mt-4">Tags</h6>
+                                    <div class="mail-list mt-1">
+                                        <% @tags.flat_map(&:tag).uniq(&:name).each do |tag|%>
+                                          <a class="<%= 'active' if params[:tag] == tag.name %>" href="?tag=<%= tag.name %>"><%= tag.name.humanize %></a>
+                                        <% end %>
+                                    </div>
+                                </div>
+                                <!-- End Left sidebar -->
+
+
+                                <!-- Right Sidebar -->
+                                <div class="email-rightbar mb-3">
+
+                                    <div class="card">
+                                      <h5 class="card-header bg-transparent border-bottom text-uppercase ">Responses</h5>
+
+                                        <ul class="message-list">
+                                            <% @responses.each do |survey_response| %>
+                                              <li>
+                                                  <div class="col-mail col-mail-1">
+                                                      <div style="margin-left: 50px;">
+                                                        <% if survey_response.video_asset.present? %>
+                                                          <span><i class="fal fa-video"></i></span>
+                                                        <% else %>
+                                                          <span><i class="fal fa-comment-alt-lines"></i></span>
+                                                        <% end %>
+
+                                                      </div>
+                                                      <a href="<%= response_path(survey_response) %>" class="title"><%= survey_response.email %></a>
+                                                  </div>
+                                                  <div class="col-mail col-mail-2">
+                                                      <a href="<%= response_path(survey_response) %>" class="subject">Survey "<%= survey_response.survey.name %>" – <span class="teaser"><%= survey_response.survey_type&.titleize %></span>
+                                                      </a>
+                                                      <div class="date" style="padding-left: 0;"><%== local_time_ago(survey_response.created_at) %></div>
+                                                  </div>
+                                              </li>
+                                            <% end %>
+
+                                        </ul>
+
+                                    </div> <!-- card -->
+
+                                    <div class="float-right mt-4">
+                                      <%== pagy_bootstrap_nav(@pagy) %>
+                                    </div>
+
+                                </div> <!-- end Col-9 -->
+
+                            </div>
+
+                        </div>

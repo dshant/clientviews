@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Userveys</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'reply' %>
+  </head>
+
+  <body>
+    <%= flash_messages %>
+    <div class="container" style="margin-top:6rem">
+      <div class="row justify-content-center">
+            <%= yield %>
+      </div>
+    </div>
+
+
+  </body>
+</html>

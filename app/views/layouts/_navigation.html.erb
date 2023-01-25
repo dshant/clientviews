@@ -1,0 +1,31 @@
+
+
+<div class="vertical-menu">
+
+  <div data-simplebar class="h-100">
+
+      <!--- Sidemenu -->
+    <div id="sidebar-menu">
+        <!-- Left Menu Start -->
+      <ul class="metismenu list-unstyled" id="side-menu">
+        <li class="menu-title"></li>
+
+        <li class="<%= 'mm-active' if current_page?('/') %>">
+          <%= link_to root_path do %>
+            <i class="fal fa-columns"></i> <span class="nav-label">Dashboard</span>
+          <% end %>
+        </li>
+        <li class="<%= 'mm-active' if request.path.starts_with?('/responses') %>">
+          <%= link_to responses_path do %>
+            <i class="fal fa-inbox"></i> <span class="nav-label">Responses</span>
+          <% end %>
+        </li>
+        <li class="<%= 'mm-active' if request.path.starts_with?('/v') %>">
+          <%= link_to visitors_path do %>
+            <i class="fal fa-user-chart"></i> <span class="nav-label">Visitors</span>
+          <% end %>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,86 @@
+<%= content_for :header_content do %>
+  <%= link_to visitors_path, class: 'd-inline-block', data: {toggle: 'tooltip'}, title: 'Back to Visitors' do %>
+    <h6><i class="fal fa-arrow-left mr-2"></i></h6>
+  <% end %>
+  <h5 class="d-inline-block ml-1 mr-5">Visitor: <%= @visitor&.email || @visitor&.uid %></h5>
+
+<% end %>
+
+<div class="row">
+  <div class="col">
+    <div class="card">
+      <h3 class="card-header bg-transparent border-bottom text-uppercase">Visitor Info</h3>
+      <div class="card-body">
+        <div class="float-right d-inline mr-5">
+          <img class="rounded-circle" src="<%= grav_img(@visitor.email) %>" />
+        </div>
+        <table class="table table-borderless d-inline">
+          <tr>
+            <td>Name:</td>
+            <td><%= @visitor.extra_attributes.dig('name') %></td>
+          </tr>
+          <tr>
+            <td>Email:</td>
+            <td><%= @visitor.email %></td>
+          </tr>
+          <tr>
+            <td>UID:</td>
+            <td><%= @visitor.uid %></td>
+          </tr>
+          <tr>
+            <td>Account:</td>
+            <td><pre><%= @visitor.account.to_json %></pre></td>
+          </tr>
+          <tr>
+            <td>Extra Attributes:</td>
+            <td><pre><%= @visitor.extra_attributes.to_json %></pre></td>
+          </tr>
+      </table>
+
+        <h4><b>Visit Count:</b> <%= @visitor.visits.count %></h4>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Survey</th>
+                <th>Domain</th>
+                <th>Path</th>
+                <th>Happened at</th>
+              </tr>
+            </thead>
+            <% @visitor.visits.each do |visit| %>
+              <tr>
+                <td><%= visit.survey.name %></td>
+                <td><%= URI.parse(visit.full_location).host if  visit.full_location %></td>
+                <td><%= visit.path %></td>
+                <td><%= visit.created_at %></td>
+              </tr>
+            <% end %>
+
+          </table>
+        </div>
+
+        <h4><b>Event Count:</b> <%= @visitor.events.count %></h4>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Survey</th>
+                <th>Event Name</th>
+                <th>Happened at</th>
+              </tr>
+            </thead>
+            <% @visitor.events.each do |event| %>
+              <tr>
+                <td><%= event.survey.name %></td>
+                <td><%= event.event %></td>
+                <td><%= event.created_at %></td>
+              </tr>
+            <% end %>
+
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

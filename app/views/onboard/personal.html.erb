@@ -1,0 +1,108 @@
+
+<%= content_for :header_actions_style do %>
+width: 60vw;
+<% end %>
+<%= content_for :header_actions do %>
+<ul class="progress-tracker progress-tracker--text progress-tracker--text-inline progress-tracker--spaced">
+  <li class="progress-step is-complete">
+    <div class="progress-text">
+      <h4 class="progress-title">Basics</h4>
+    </div>
+    <div class="progress-marker" data-text='1'></div>
+  </li>
+  <li class="progress-step is-active">
+    <div class="progress-text">
+      <h4 class="progress-title">Personalization</h4>
+    </div>
+    <div class="progress-marker" data-text='2'></div>
+  </li>
+  <li class="progress-step ">
+    <div class="progress-text">
+      <h4 class="progress-title">Finalize</h4>
+    </div>
+    <div class="progress-marker" data-text='3'></div>
+  </li>
+</ul>
+<% end %>
+
+<div class="row">
+  <div class="col">
+    <%= form_with model: @survey, url: onboard_update_path(@survey, next: 'finalize', current: 'personal'), method: :put do |form| %>
+    <div class="card">
+        <h4 class="card-header mt-0">Survey Details</h4>
+        <div class="card-body" >
+
+
+        <% if @survey.errors.any? %>
+            <div class="error_explanation">
+              <h4>
+                <%= "#{pluralize(@survey.errors.count, "error")} prohibited this route from being saved:" %>
+              </h4>
+              <ul>
+          <% @survey.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+            </div>
+        <% end %>
+
+        <div class="form-group row mb-4">
+            <%= form.label :person_name, 'Requestor\'s Name', class: 'col-sm-3 col-form-label' %>
+            <div class="col-sm-9">
+              <p class="text-muted my-0">
+                  Enter the name you want to show up in the widget as a personal greeting. (e.g John Doe, Founder)
+              </p>
+              <%= form.text_field :person_name, class: 'form-control' %>
+            </div>
+        </div>
+
+        <div class="form-group row mb-4">
+            <%= form.label :avatar, 'Requestor\'s Picture', class: 'col-sm-3 col-form-label' %>
+            <div class="col-sm-9">
+              <p class="text-muted my-0">
+                  Upload an image, otherwise Userveys will default to a Gravatar image. If you wish to have no personal image, chose the "hide image" option below.
+              </p>
+              <div class="row">
+                <div class="col-2">
+                  <% if @survey.avatar.attached? %>
+                    <%= image_tag Rails.application.routes.url_helpers.rails_representation_url(@survey.avatar.variant(resize_to_limit: [144, 144]).processed, only_path: true) %>
+                  <% else %>
+                    <%=  image_tag @survey.image %>
+                  <% end %>
+                </div>
+                <div class="col">
+                  <%= form.file_field :avatar, class: 'form-control' %>
+                </div>
+            </div>
+        </div>
+
+      </div>
+      <div class="form-group row mb-4">
+          <%= form.label :hide_image, 'Hide Header Image', class: 'col-sm-3 col-form-label' %>
+          <div class="col-sm-9">
+            <p class="text-muted my-0">
+                Hide all top survey images. Will not show any image regardless of being uploaded or available through Gravatar.
+            </p>
+            <%= form.check_box :hide_image, data: {action: 'survey-form#preview'} %>
+          </div>
+      </div>
+      <div class="form-group row mb-4">
+          <%= form.label :content, 'Personal Message', class: 'col-sm-3 col-form-label' %>
+          <div class="col-sm-9">
+            <p class="text-muted my-0">
+                Enter the personal message to request the user's feedback. Aim to make this personal and approachable. The more personal it may seem the liklier there will be a response.
+            </p>
+            <%= form.rich_text_area :content, data: {action: 'survey-form#trix-change->preview'} %>
+          </div>
+      </div>
+    </div>
+  </div>
+    <div class="my-5">
+        <%= link_to "Back", onboard_back_path(destination: 'basics', survey_id: @survey.id), class: 'btn btn-secondary' %>
+        <%= form.submit "Next", class: 'btn btn-primary w-md' %>
+          <%= link_to "Skip", dashboard_index_path, class: 'btn btn-outline-secondary float-right' %>
+    </div>
+    <% end %>
+
+  </div>
+</div>

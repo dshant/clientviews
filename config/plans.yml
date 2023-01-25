@@ -1,0 +1,80 @@
+production:
+  free0221:
+    surveys: 1
+    responses: 25
+    video: false
+    visits: 1000
+    integrations: true
+    video_time: 0
+    amount: 0
+    name: "free"
+    plan_signup_id: "free0221"
+    stripe_price_id: "price_1IO54lFtWNCOpeN32cYZvLvx"
+    active: true
+    displayable: true
+  starter0221:
+    surveys: 10
+    responses: 1000
+    video: true
+    integrations: true
+    video_time: 15
+    visits: 5000
+    amount: 2900
+    name: "starter"
+    plan_signup_id: "starter0221"
+    stripe_price_id: "price_1IO54xFtWNCOpeN3XYs2M01H"
+    active: true
+    displayable: true
+  growth0221:
+    surveys: 25
+    responses: 2500
+    video: true
+    visits: 15000
+    integrations: true
+    video_time: 60
+    amount: 7900
+    name: "growth"
+    plan_signup_id: "growth0221"
+    stripe_price_id: "price_1IO54sFtWNCOpeN3IM0Gud1u"
+    active: true
+    displayable: true
+development:
+  free0221:
+    surveys: 1
+    responses: 25
+    video: false
+    visits: 1000
+    integrations: true
+    video_time: 0
+    amount: 0
+    name: "free"
+    plan_signup_id: "free0221"
+    stripe_price_id: "price_1IIq6rFtWNCOpeN3p0CRaA7n"
+    active: true
+    displayable: true
+  starter0221:
+    surveys: 10
+    responses: 1000
+    video: true
+    integrations: true
+    video_time: 15
+    visits: 5000
+    amount: 2900
+    name: "starter"
+    plan_signup_id: "starter0221"
+    stripe_price_id: "price_1IIq6KFtWNCOpeN3oVAEA7fH"
+    active: true
+    displayable: true
+  growth0221:
+    surveys: 25
+    responses: 2500
+    video: true
+    visits: 15000
+    integrations: true
+    video_time: 60
+    amount: 7900
+    name: "growth"
+    plan_signup_id: "growth0221"
+    stripe_price_id: "price_1IIq6eFtWNCOpeN3CuAPawzd"
+    active: true
+    displayable: true

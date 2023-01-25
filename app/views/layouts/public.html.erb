@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Userveys</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <script>
+      window.Userveys = {setup: {id: "<%= @survey.id %>"}}
+      setTimeout(() => {
+        const event = new Event("survey.<%= @survey.id %>.display");
+        window.dispatchEvent(event);
+      }, 250);
+    </script>
+    <%= javascript_pack_tag 'embed', id: 'userveys-js' %>
+  </head>
+
+  <body id="public">
+    <div class="container" style="margin-top:6rem">
+      <div class="row justify-content-center">
+            <%= yield %>
+      </div>
+    </div>
+
+
+  </body>
+</html>

@@ -1,0 +1,160 @@
+<%= content_for :header_content do %>
+  <%= link_to responses_path, class: 'd-inline-block', data: {toggle: 'tooltip'}, title: 'Back to Responses' do %>
+    <h6><i class="fal fa-arrow-left mr-2"></i></h6>
+  <% end %>
+  <h5 class="d-inline-block ml-1 mr-5">Response's Survey: <%= @response.survey.name %></h5>
+
+<% end %>
+
+<%= content_for :header_actions do %>
+  <%= link_to survey_path(@response.survey), class: 'd-inline-block btn btn-dark btn-label' do %>
+    <i class="fal fa-comment-alt-smile label-icon"></i>Survey
+  <% end %>
+  <%= link_to api_v1_survey_response_path(@response.survey, @response), method: 'delete', data: {confirm: 'Are you sure?'}, class: 'd-inline-block btn btn-danger btn-label' do %>
+    <i class="fal fa-trash label-icon"></i>Delete
+  <% end %>
+<% end %>
+
+  <div class="row">
+      <div class="col-12">
+
+
+
+              <div class="card">
+
+                  <div class="card-body">
+                      <div class="media mb-4">
+                          <div class="media-body">
+                              From<!-- <h5 class="font-size-14 mt-1">Humberto D. Champion</h5> -->
+                              <small class="text-muted"><%= @response&.email || 'No Information Provided' %></small>
+                          </div>
+                      </div>
+
+                      <h4 class="mt-0 font-size-16"><%= @response.survey&.name %> - <%= @response.survey_type.titleize %></h4>
+
+                      <% if @response.video_asset.present? %>
+                        <div>
+                          <b>Survey Respondant Video:</b>
+                        </div>
+                        <div class="embed-responsive embed-responsive-16by9">
+                          <video id="playback" controls></video>
+                        </div>
+                      <% else %>
+                        <p><b>Value:</b> <%= @response.value %>
+                        <%= "of #{@response.survey.counter_max}" if @response.survey_type.in? %w(scale scale_w_text)%>
+                        <%== "of 5 &#{@response.survey.rating_icon == 'stars' ? 'star' : '#x2661'};'s'" if @response.survey_type.in? %w(rating rating_w_text)%></p>
+                      <% end %>
+                      <% if @response&.extra_text&.present? %>
+                        <p><b>Extra Freeform text:</b></p>
+                          <p>
+                            <%= @response.extra_text %>
+                          </p>
+                      <% end %>
+                  </div>
+
+              </div>
+              <% if @response&.email&.present? %>
+              <div class="card">
+                <div class="card-body">
+                  <p class="lead">In the section below you can read and reply with the respondent to continue the conversation.</p>
+                </div>
+              </div>
+              <% @response.replies.each do |convo| %>
+                <div class="card">
+
+                    <div class="card-body">
+                      <div class="media mb-4">
+                          <div class="media-body">
+                              From<!-- <h5 class="font-size-14 mt-1">Humberto D. Champion</h5> -->
+                              <div class="float-right date text-muted font-weight-light">
+                                <small>
+                                  <%== local_time_ago(convo.created_at) %>
+                                </small>
+                              </div>
+                              <small class="text-muted"><%= convo.from.email %></small>
+                          </div>
+                      </div>
+                      <% if convo.source == 'userveys' %>
+                        <p><%== convo.message %></p>
+                      <% else %>
+                        <p><%== convo.message %></p>
+                      <% end %>
+                    </div>
+                </div>
+              <% end %>
+
+
+                <div class="card" data-controller="reply">
+
+                    <div class="card-body">
+
+
+                    <%= form_with url: response_reply_path(@response), method: :post, class: 'clearfix', id: 'reply_form', html: {style: 'display:none;'} do |f| %>
+                      <div class="clearfix mb-2">
+                        <span>Reply to the response:</span>
+                        <button data-action="reply#showTrix" class="btn btn-outline-secondary float-right" >Hide</button>
+                      </div>
+                      <%= f.rich_text_area :message %>
+                      <%= f.submit "Add a Reply", class: 'btn btn-primary my-3' %>
+                    <% end %>
+                    <button data-action="reply#showTrix" class="btn btn-secondary" id="reply-show"><i class="fal fa-reply"></i> Reply</button>
+                  </div>
+                </div>
+              <% end %>
+          </div>
+        </div>
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h5>Tags</h5>
+
+        <%= form_with model: @response do |f| %>
+          <%= f.select :tag_list, options_for_select(f.object.tag_list, f.object.tag_list), {},  multiple: true, class: 'form-control', id:'js-tag-list' %>
+          <!-- <select class="form-control" id="js-tag-list" multiple="multiple"></select> -->
+          <%= f.submit "Save", class: 'btn btn-secondary my-3' %>
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<% if @response.video_asset.present? %>
+<!-- Use HLS.js to support the HLS format in browsers. -->
+
+<script>
+  (function(){
+    let event = "DOMContentLoaded";
+
+    if (typeof Turbolinks == "object" && Turbolinks.supported) {
+      event = "turbolinks:load";
+    } else if (typeof Turbo == "object" && Turbo.supported) {
+      event = "turbo:load";
+    }
+
+    document.addEventListener(event, () => {
+    // Replace with your asset's playback ID
+
+      const video = document.getElementById("playback");
+
+      if (video){
+        const playbackId = "<%= @response.video_asset.playback_id %>";
+        const url = "https://stream.mux.com/" + playbackId + ".m3u8";
+        if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          video.src = url;
+        } else if (Hls.isSupported()) {
+          // HLS.js-specific setup code
+          hls = new Hls();
+          hls.loadSource(url);
+          hls.attachMedia(video);
+        }
+      }
+      // Let native HLS support handle it if possible
+
+    });
+  })();
+</script>
+<% end %>

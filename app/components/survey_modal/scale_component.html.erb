@@ -1,0 +1,5 @@
+<div class="btn-group">
+  <% (1..(@survey.counter_max || 5)).each do |i| %>
+    <button class="rating-btn" style="width: <%= 100 / @survey.counter_max %>%" data-value="<%= i %>"><%= i %></button>
+  <% end %>
+</div>

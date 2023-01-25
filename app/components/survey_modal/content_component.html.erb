@@ -1,0 +1,30 @@
+<main class="modal__content" id="modal-1-content">
+  <div id="top_content">
+    <% unless survey.hide_image %>
+      <% if survey.avatar.attached? %>
+        <%= image_tag Rails.application.routes.url_helpers.rails_representation_url(@survey.avatar.variant(resize_to_limit: [144, 144]).processed, only_path: true), style: 'height:144px; width:144px' %>
+      <% else %>
+        <%=  image_tag survey.image, style: 'height:144px; width:144px' %>
+      <% end %>
+      <strong class="person"><%= survey.person_name%></strong>
+    <% end %>
+  </div>
+  <p id='body'>
+    <%= survey.content.body%>
+  </p>
+  <form name="survey_<%= survey.id %>" action="<%= api_v1_survey_responses_url([survey], public: public) %>" method="post"
+    data-surveyVideoUploadUrl="<%= rails_direct_uploads_url %>" data-surveyVideoToken="<%= DUC.encrypt_and_sign('amazon.Response#video_feedback_data') %>"
+    >
+    <div class="survey__content">
+      <% if survey.video_feedback_enabled %>
+        <div id="videoResponse"></div>
+      <% end %>
+      <%= render survey_type_component.new(survey: survey) unless survey_type_component.nil? %>
+    </div>
+    <% if survey.email_collect %>
+      <div class="collect__email">
+        <%= render SurveyModal::CollectEmailComponent.new(survey: survey) %>
+      </div>
+    <% end %>
+  </form>
+</main>

@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Tomorrow" rel="stylesheet" type="text/css">
+    <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+  </head>
+  <body class="bg-gray-200">
+    <% if @preview.present? %>
+      <preview><%= @preview %></preview>
+    <% end %>
+    <div class="container bg-gray-200">
+      <h1 class="text-center mt-2 mb-4" style="font-family:Tomorrow; font-size:32px;">
+        <%= image_tag('logo_w_type.png', style: 'height: 64px;margin: auto;') %>
+      </h1>
+      <div class="card mb-4">
+        <div class="card-body">
+          <h3 class="text-center mb-4"></h3>
+
+           <p class="mb-4">
+            <%= yield %>
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>

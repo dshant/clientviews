@@ -1,0 +1,8 @@
+<%= content_for :header_content do %>
+  <%= link_to survey_path(@webhook.survey), class: 'd-inline-block', data: {toggle: 'tooltip'}, title: 'Back to Survey' do %>
+    <h6><i class="fal fa-arrow-left mr-2"></i></h6>
+  <% end %>
+  <h5 class="d-inline-block ml-1 mr-5">Edit '<%= @webhook.name %>' Webhook</h5>
+<% end %>
+
+<%= render partial: 'form' %>

@@ -1,0 +1,148 @@
+<%= content_for :header_content do %>
+  <h5>Dashboard</h5>
+<% end %>
+
+<div id="dashcon">
+  <% @surveys.in_groups_of(3, false).each_with_index do |group,i| %>
+    <div class="row">
+      <% if i == 0 %>
+        <div class="col-12 col-lg-4">
+          <div class="card link" style="max-height: 233px">
+            <h5 class="card-header bg-transparent border-bottom text-uppercase ">Usage</h5>
+            <div class="card-body pt-1">
+              <div class="mb-1">
+                <b>Plan:</b> <%= Current.account.plan.name.capitalize %>
+              </div>
+              <div class="my-1">
+                <b>Surveys:</b> <%= Current.account.surveys.size %> / <%= Current.account.limits.surveys %>
+                <div class="progress my-1">
+                  <div class="d-inline progress-bar <%= 'bg-danger' if (Current.account.surveys.size >= Current.account.limits.surveys) %>" role="progressbar" style="width: <%= (Current.account.surveys.size.to_f / Current.account.limits.surveys) * 100 %>%" aria-valuenow="<%= (Current.account.surveys.size.to_f / Current.account.limits.surveys) * 100 %>" aria-valuemin="0" aria-valuemax="100">
+                  </div>
+                </div>
+              </div>
+              <div class="my-1">
+                <b>Monthly Responses:</b> <%= Current.account.responses_this_month.size %> / <%= Current.account.limits.responses %>
+                <div class="progress my-1">
+                  <div class="d-inline progress-bar" role="progressbar" style="width: <%= (Current.account.responses_this_month.size.to_f / Current.account.limits.responses) * 100 %>%" aria-valuenow="<%= (Current.account.responses_this_month.size.to_f / Current.account.limits.responses) * 100 %>" aria-valuemin="0" aria-valuemax="100">
+                  </div>
+                </div>
+              </div>
+              <div class="my-1">
+                <b>Monthly Unique Visitors:</b> <%= Current.account.visits_this_month.size %> / <%= Current.account.limits.visits %>
+                <div class="progress my-1">
+                  <div class="d-inline progress-bar" role="progressbar" style="width: <%= [(Current.account.visits_this_month.size.to_f / Current.account.limits.visits),0.001].max * 100 %>%" aria-valuenow="<%= (Current.account.visits_this_month.size.to_f / Current.account.limits.visits) * 100 %>" aria-valuemin="0" aria-valuemax="100">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer bg-transparent border-top text-muted">
+              <%= button_to "Change Plan", billing_path, method: 'get', class: 'btn btn-sm btn-primary', style: 'font-size: 0.55rem;'  %>
+            </div>
+          </div>
+        </div>
+          <div class="col-12 col-lg-2">
+            <div class="card link <%= 'disabled' if (Current.account.surveys.size >= Current.account.limits.surveys) %>">
+              <%= link_to new_survey_path, class: "my-auto", disabled: (Current.account.surveys.size >= Current.account.limits.surveys) do %>
+                <div class="card-body text-center">
+                  <p>New Survey</p>
+                  <i class="fa fa-plus"></i>
+                </div>
+              <% end %>
+            </div>
+          </div>
+      <% end %>
+      <% group.each do |survey| %>
+
+          <div class="col-lg-2">
+              <div class="card link">
+                <h5 class="card-header bg-transparent border-bottom text-uppercase text-center"><%= survey.name %></h5>
+                <%= link_to survey_path(survey) do %>
+                  <div class="card-body">
+
+
+                    <p><b>Location Type: </b><%= survey&.position&.split(' ')&.first&.titleize %></p>
+                    <p><b>Survey Type: </b><%= survey&.survey_type&.titleize %></p>
+                    <p><b>Responses: </b><%= survey&.responses&.size %></p>
+
+
+                  </div>
+                <% end %>
+                <div class="card-footer bg-transparent border-top text-muted">
+                  <div class="float-right">
+                    <%= link_to edit_survey_path(survey), class: 'mr-2' do %>
+                      <i class="fal fa-edit"></i>
+                    <% end %>
+                    <span><i class="fal fa-trash"></i></span>
+                  </div>
+                </div>
+              </div>
+          </div>
+
+      <% end %>
+    </div>
+  <% end %>
+  <% if @surveys.empty? %>
+    <div class="row">
+      <div class="col-12 col-lg-2">
+        <div class="card link">
+          <%= link_to new_survey_path, class: 'my-auto' do %>
+            <div class="card-body text-center">
+              <p>New Survey</p>
+              <i class="fa fa-plus"></i>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+
+
+  <div class="row">
+    <div class="col">
+        <div class="card">
+
+          <div class="card-header bg-transparent border-bottom text-uppercase">
+            <div class="float-right">
+              <a href="<%= responses_path %>">View More</a>
+            </div>
+            <h5 class="my-0">Recent Responses</h5>
+          </div>
+            <div class="card-body">
+
+
+                <div class="row">
+                    <div class="col">
+                      <% unless @responses.empty? %>
+                        <div class="table-responsive">
+                          <table class="table mb-0">
+                              <thead>
+                                  <tr>
+                                      <th>Survey</th>
+                                      <th>Response</th>
+                                      <th>Email (if collected)</th>
+                                      <th>When?</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                <% @responses.each do |survey_response| %>
+                                  <tr>
+                                      <td><%= survey_response.survey.name %></td>
+                                      <td><%= survey_response.value %></td>
+                                      <td><%= survey_response.email %></td>
+                                      <td><%== local_time_ago(survey_response.created_at) %></td>
+                                  </tr>
+                                <% end %>
+                              </tbody>
+                          </table>
+                      </div>
+                      <% else %>
+                        <p>Add Some <%= link_to "Surveys", new_survey_path %></p>
+                      <% end %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>

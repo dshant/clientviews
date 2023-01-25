@@ -1,0 +1,177 @@
+<%= content_for :header_content do %>
+  <%= link_to dashboard_index_path, class: 'd-inline-block', data: {toggle: 'tooltip'}, title: 'Back to Dashboard' do %>
+    <h6><i class="fal fa-arrow-left mr-2"></i></h6>
+  <% end %>
+  <h5 class="d-inline-block ml-1 mr-5">Survey: <%= @survey.name %></h5>
+
+<% end %>
+
+<%= content_for :header_actions do %>
+  <%= link_to edit_survey_path(@survey), class: 'd-inline-block btn btn-dark btn-label' do %>
+    <i class="fal fa-pencil label-icon"></i>Edit
+  <% end %>
+  <%= link_to survey_responses_path(@survey), class: 'd-inline-block btn btn-dark btn-label' do %>
+    <i class="fal fa-comment-alt-smile label-icon"></i>Responses
+  <% end %>
+  <%= link_to survey_visitors_path(@survey), class: 'd-inline-block btn btn-dark btn-label' do %>
+    <i class="fal fa-user-friends label-icon"></i>Visitors
+  <% end %>
+  <%= link_to survey_notifications_path(@survey), class: 'd-inline-block btn btn-dark btn-label' do %>
+    <i class="fal fa-bell label-icon"></i>Notifications
+  <% end %>
+  <%= link_to survey_path(@survey), method: 'delete', data: {confirm: 'Are you sure?'}, class: 'd-inline-block btn btn-danger btn-label' do %>
+    <i class="fal fa-trash label-icon"></i>Delete
+  <% end %>
+<% end %>
+
+<%= javascript_pack_tag 'surveys_show', 'data-turbo-track': 'reload' %>
+
+<div class="row">
+  <div class="col">
+    <div class="card mini-stats-wid">
+      <div class="card-body">
+          <div class="media">
+              <div class="media-body">
+                  <p class="text-muted fw-medium">Visits</p>
+                  <h4 class="mb-0"><%= @survey.visits.size %></h4>
+              </div>
+
+              <div class="mini-stat-icon avatar-sm rounded-circle bg-primary align-self-center">
+                  <span class="avatar-title">
+                      <i class="fal fa-users"></i>
+                  </span>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card mini-stats-wid">
+      <div class="card-body">
+          <div class="media">
+              <div class="media-body">
+                  <p class="text-muted fw-medium">Unique Visitors</p>
+                  <h4 class="mb-0"><%= @survey.visits.pluck(:visitor_token).uniq.size %></h4>
+              </div>
+
+              <div class="mini-stat-icon avatar-sm rounded-circle bg-primary align-self-center">
+                  <span class="avatar-title">
+                      <i class="fal fa-user"></i>
+                  </span>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card mini-stats-wid">
+      <div class="card-body">
+          <div class="media">
+              <div class="media-body">
+                  <p class="text-muted fw-medium">Survey Responses</p>
+                  <h4 class="mb-0"><%= @survey.responses.size %></h4>
+              </div>
+
+              <div class="mini-stat-icon avatar-sm rounded-circle bg-primary align-self-center">
+                  <span class="avatar-title">
+                      <i class="fal fa-comment-alt-smile"></i>
+                  </span>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card mini-stats-wid">
+      <div class="card-body">
+          <div class="media">
+              <div class="media-body">
+                  <p class="text-muted fw-medium">Survey Responses Conversion</p>
+                  <h4 class="mb-0"><%= @survey.responses.empty? ? 0 : ((@survey.responses.size / @survey.visits.pluck(:visitor_token).uniq.size.to_f) * 100).truncate(2) %>%</h4>
+              </div>
+
+              <div class="mini-stat-icon avatar-sm rounded-circle bg-primary align-self-center">
+                  <span class="avatar-title">
+                      <i class="fal fa-comment-alt"></i>
+                  </span>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <h5 class="card-header bg-transparent border-bottom text-uppercase ">Share</h5>
+          <div class="card-body">
+            Get a link to share your survey anywhere!
+            <div class="input-group mb-3">
+              <input id="surl" type="text" class="form-control" readonly value="<%= public_url(@survey) %>">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary btn-copy" type="button" data-placement="right" data-clipboard-target="#surl">
+                  <span><i class="fal fa-clipboard"></i></span>
+                </button>
+              </div>
+            </div>
+            <span>
+              <a type="button" target="_blank" data-toggle="tooltip" data-placement="top" title="Email" class="btn btn-sm btn-rounded btn-light mr-3" href="mailto:?subject=Can you please fill out this Survey?&body=It would be really appreciated if you can fill out this survey: %0D%0A%0D%0A <%= public_url(@survey) %> %0D%0A%0D%0AThanks!"><span><i class="fal fa-envelope"></i></span></a>
+              <a type="button" target="_blank" data-toggle="tooltip" data-placement="top" title="Twitter" class="btn btn-sm btn-rounded btn-light mr-3" href="https://twitter.com/intent/tweet?text=It would be really appreciated if you can fill out this survey: %0D%0A%0D%0A <%= public_url(@survey) %> %0D%0A%0D%0AThanks!""><span><i class="fa fa-twitter"></i></span></a>
+              <a type="button" target="_blank" data-toggle="tooltip" data-placement="top" title="Facebook" class="btn btn-sm btn-rounded btn-light mr-3" href="https://www.facebook.com/sharer/sharer.php?quote=It would be really appreciated if you can fill out this survey&u=<%= public_url(@survey) %>"><span><i class="fa fa-facebook"></i></span></a>
+              <a type="button" target="_blank" data-toggle="tooltip" data-placement="top" title="LinkedIn" class="btn btn-sm btn-rounded btn-light mr-3" href="https://www.linkedin.com/shareArticle?url=<%= public_url(@survey) %>&title=It would be really appreciated if you can fill out this survey"><span><i class="fa fa-linkedin"></i></span></a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h5 class="card-header bg-transparent border-bottom text-uppercase ">Embed</h5>
+      <div class="card-body">
+        <p>
+          Alright, so you want the widget on your page. There is at least one step up ahead.
+        </p>
+        <p>
+          You will need to be able to edit the HTML code of the pages you want to embed the code. Although we can guide you, we are unable to do this for you as it requires priviledged access to your systems.
+        </p>
+        <b>Instructions</b>
+        <p class="my-3">
+          1. Copy and paste the following code right before the body tag ends:
+        </p>
+        <p class="my-5"><pre style="background-color:#e8e8e8;white-space: pre-wrap;" class="p-3">&lt;script&gt;
+window.Userveys = {setup: {id: "<%= @survey.id %>"}}
+&lt;/script&gt;
+&lt;script id="userveys-js" src="<%= embed_url(format: :js) %>"&gt;&lt;/script&gt;
+&lt;link rel="stylesheet" type="text/css" href="<%= embed_url(format: :css) %>"&gt;</pre></p>
+        <p class="mb-3">If you have chosen a delay or path based trigger. You can stop here! Userveys will handle the display of the widget for you. However, if you chose manual, read on:</p>
+        <p class="my-3">2. Add a trigger (like <a href="https://userveys.com" target="_blank">Userveys' homepage</a>)</p>
+        <button onclick="window.Userveys.display('<%= @survey.id %>')" class="btn btn-primary my-2">Button Trigger</button>
+        <br>
+        <p class="my-5"><pre style="background-color:#e8e8e8;white-space: pre-wrap;" class="p-3">&lt;button onclick="window.Userveys.display('<%= @survey.id %>')" class="btn"&gt;Click Me&lt;/button&gt;</pre></p>
+        <p class="mt-5 mb-4"> - or - </p>
+        <a href="#" onclick="event.preventDefault();window.Userveys.display('<%= @survey.id %>')" class="my-2">Link Trigger</a>
+        <br>
+        <p class="my-5"><pre style="background-color:#e8e8e8;white-space: pre-wrap;" class="p-3">&lt;a onclick="event.preventDefault();window.Userveys.display('<%= @survey.id %>')" class="btn"&gt;Click Me&lt;/a&gt;</pre></p>
+        <p class="mt-5 mb-4"> - or add your own JavaScript events - </p>
+        <p class="my-5"><pre style="background-color:#e8e8e8;white-space: pre-wrap;" class="p-3">&lt;script type="text/javascript"&gt;
+window.Userveys.display('<%= @survey.id %>')
+window.Userveys.hide('<%= @survey.id %>')
+&lt;/script&gt;</pre></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <style media="screen">
+      #u-wrapper .micromodal-slide {
+        display: block !important;
+      }
+    </style>
+    <%= stylesheet_link_tag sources_from_manifest_entries(["embed"], type: :stylesheet).first, media: 'all', 'data-turbo-track': 'reload' %>
+
+    <div id="u-wrapper" data-no-js="true" class="preview show public">
+
+    </div>
+  </div>
+</div>

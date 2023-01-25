@@ -1,0 +1,13 @@
+<%= form_with model: @site do |form| %>
+  <% if @site.errors.present? %>
+    <%=  @site.errors.errors.inspect %>
+  <% end %>
+  <div class="field">
+    <%= form.label :domain %>
+    <%= form.text_field :domain %>
+  </div>
+
+  <div class="field">
+    <%= form.submit %>
+  </div>
+<% end %>

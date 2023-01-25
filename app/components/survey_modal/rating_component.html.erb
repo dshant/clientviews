@@ -1,0 +1,6 @@
+<div class="rating">
+  <% uicon = @survey.rating_icon == 'stars' ? 'star' : '#x2661' %>
+  <% (1..5).each do |i| %>
+    <span class="rating-btn <%= @survey.rating_icon.singularize %>" data-value="<%= i %>">&<%= uicon %>;</span>
+  <% end %>
+</div>

@@ -1,0 +1,50 @@
+<%= content_for :header_content do %>
+  <%= link_to survey_path(@survey), class: 'd-inline-block', data: {toggle: 'tooltip'}, title: 'Back to Survey' do %>
+    <h6><i class="fal fa-arrow-left mr-2"></i></h6>
+  <% end %>
+  <h5 class="d-inline-block ml-1 mr-5"><%= @survey.name %>'s Visitors</h5>
+<% end %>
+
+<div class="row">
+  <div class="col">
+      <div class="card">
+
+          <div class="card-body">
+
+
+              <div class="row">
+                  <div class="col">
+                    <% unless @visits.empty? %>
+                      <div class="table-responsive">
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>First Seen</th>
+                                    <th>Last Seen</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                              <% @visits.each do |visit| %>
+                                <tr>
+                                    <td><%= link_to (visit&.visitor_identity&.extra_attributes&.dig('name') ||  visit&.visitor_identity&.email || visit&.visitor_identity&.uid || visit&.visitor_token), visitor_path(visit&.visitor_identity&.id || visit.visitor_token) %></td>
+                                    <td><%== local_time_ago @visit_all.where(visitor_token: visit&.visitor_token).order(created_at: :asc).limit(1)&.first&.created_at %></td>
+                                    <td><%== local_time_ago @visit_all.where(visitor_token: visit&.visitor_token).order(updated_at: :desc).limit(1)&.first&.updated_at %></td>
+
+                                </tr>
+                              <% end %>
+                            </tbody>
+                        </table>
+                        <div class="float-right mt-4">
+                          <%== pagy_bootstrap_nav(@pagy) %>
+                        </div>
+
+                      </div>
+                    <% end %>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

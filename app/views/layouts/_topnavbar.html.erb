@@ -1,0 +1,56 @@
+
+
+<header id="page-topbar">
+  <div class="navbar-header">
+    <div class="d-flex">
+        <!-- LOGO -->
+        <div class="navbar-brand-box">
+            <a href="<%=root_path%>" class="logo logo-light" style="color:#e2e8f0;font-family:Tomorrow;font-size:32px">
+                <span class="logo-sm">
+                    U
+                </span>
+                <span class="logo-lg">
+                    Userveys
+                </span>
+            </a>
+        </div>
+
+        <button type="button" class="btn btn-sm px-3 font-size-16 header-item waves-effect d-lg-none" id="vertical-menu-btn">
+            <i class="fa fa-fw fa-bars"></i>
+        </button>
+
+        <div class="app-search d-block ml-4 my-auto">
+          <%= yield :header_content %>
+        </div>
+
+      </div>
+      <div class="d-flex">
+        <div class="app-search d-block ml-4 my-auto" style="<%= yield :header_actions_style %>">
+          <%= yield :header_actions %>
+        </div>
+      </div>
+      <div class="d-flex">
+        <div class="dropdown d-inline-block" id='user-dropdown'>
+            <button type="button" class="btn header-item waves-effect show" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <img class="rounded-circle header-profile-user" src="<%= current_user.grav %>" alt="Header Avatar">
+                <span class="d-none d-xl-inline-block ms-1" key="t-henry"><%= current_user.name || current_user.email %></span>
+                <i class="chev fal fa-chevron-down d-none d-xl-inline-block"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end" style="" data-popper-placement="bottom-end">
+              <!-- item-->
+              <!-- <a class="dropdown-item" href="#"><i class="bx bx-user font-size-16 align-middle me-1"></i> <span key="t-profile">Profile</span></a> -->
+              <%= link_to billing_path, class: 'dropdown-item' do %>
+                <i class="fal fa-wallet"></i> <span key="t-my-wallet">Billing</span>
+              <% end %>
+              <!-- <a class="dropdown-item d-block" href="#"><span class="badge bg-success float-end">11</span><i class="bx bx-wrench font-size-16 align-middle me-1"></i> <span key="t-settings">Settings</span></a> -->
+              <!-- <a class="dropdown-item" href="#"><i class="bx bx-lock-open font-size-16 align-middle me-1"></i> <span key="t-lock-screen">Lock screen</span></a> -->
+              <div class="dropdown-divider"></div>
+              <%= link_to(destroy_user_session_path, :method => :delete, class: 'dropdown-item text-danger') do %>
+                <i class="fal fa-cog text-danger"></i> <span key="t-logout">Logout</span>
+              <% end %>
+            </div>
+        </div>
+
+        </div>
+    </div>
+</header>

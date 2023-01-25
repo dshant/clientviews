@@ -1,0 +1,174 @@
+<%= content_for :header_content do %>
+
+  <h5 class="d-inline-block ml-1 mr-5">Admin Info</h5>
+
+<% end %>
+
+<div class="row">
+  <div class="col">
+    <div class="card mini-stats-wid">
+      <div class="card-body">
+          <div class="media">
+              <div class="media-body">
+                  <p class="text-muted fw-medium">Surveys</p>
+                  <h4 class="mb-0"><%= Survey.count %></h4>
+              </div>
+
+              <div class="mini-stat-icon avatar-sm rounded-circle bg-primary align-self-center">
+                  <span class="avatar-title">
+                      <i class="fal fa-users"></i>
+                  </span>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card mini-stats-wid">
+      <div class="card-body">
+          <div class="media">
+              <div class="media-body">
+                  <p class="text-muted fw-medium">Visits</p>
+                  <h4 class="mb-0"><%= Visit.count %></h4>
+              </div>
+
+              <div class="mini-stat-icon avatar-sm rounded-circle bg-primary align-self-center">
+                  <span class="avatar-title">
+                      <i class="fal fa-users"></i>
+                  </span>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card mini-stats-wid">
+      <div class="card-body">
+          <div class="media">
+              <div class="media-body">
+                  <p class="text-muted fw-medium">Unique Visitors</p>
+                  <h4 class="mb-0"><%= Visit.all.pluck(:visitor_token).uniq.size %></h4>
+              </div>
+
+              <div class="mini-stat-icon avatar-sm rounded-circle bg-primary align-self-center">
+                  <span class="avatar-title">
+                      <i class="fal fa-user"></i>
+                  </span>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card mini-stats-wid">
+      <div class="card-body">
+          <div class="media">
+              <div class="media-body">
+                  <p class="text-muted fw-medium">Survey Responses</p>
+                  <h4 class="mb-0"><%= Response.count %></h4>
+              </div>
+
+              <div class="mini-stat-icon avatar-sm rounded-circle bg-primary align-self-center">
+                  <span class="avatar-title">
+                      <i class="fal fa-comment-alt-smile"></i>
+                  </span>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="row">
+  <div class="col-lg-3 col-12">
+    <div class="card mini-stats-wid">
+      <div class="card-body">
+          <div class="media">
+              <div class="media-body">
+                  <p class="text-muted fw-medium">Surveys</p>
+                  <h4 class="mb-0"><%= area_chart(Survey.group_by_week(:created_at).count, {messages: {empty: "No message data to graph"}}) %></h4>
+              </div>
+
+              <div class="mini-stat-icon avatar-sm rounded-circle bg-primary align-self-center">
+                  <span class="avatar-title">
+                      <i class="fal fa-users"></i>
+                  </span>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3 col-12">
+    <div class="card mini-stats-wid">
+      <div class="card-body">
+          <div class="media">
+              <div class="media-body">
+                  <p class="text-muted fw-medium">Visits</p>
+                  <h4 class="mb-0"><%= area_chart(Visit.group_by_week(:created_at).count, {messages: {empty: "No message data to graph"}}) %></h4>
+              </div>
+
+              <div class="mini-stat-icon avatar-sm rounded-circle bg-primary align-self-center">
+                  <span class="avatar-title">
+                      <i class="fal fa-users"></i>
+                  </span>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3 col-12">
+    <div class="card mini-stats-wid">
+      <div class="card-body">
+          <div class="media">
+              <div class="media-body">
+                  <p class="text-muted fw-medium">Unique Visitors</p>
+                  <h4 class="mb-0"><%= area_chart(Visit.select(:visitor_token).distinct.group_by_week(:created_at).count, {messages: {empty: "No message data to graph"}}) %></h4>
+              </div>
+
+              <div class="mini-stat-icon avatar-sm rounded-circle bg-primary align-self-center">
+                  <span class="avatar-title">
+                      <i class="fal fa-user"></i>
+                  </span>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-3 col-12">
+    <div class="card mini-stats-wid">
+      <div class="card-body">
+          <div class="media">
+              <div class="media-body">
+                  <p class="text-muted fw-medium">Survey Responses</p>
+                  <h4 class="mb-0"><%= area_chart(Response.group_by_week(:created_at).count, {messages: {empty: "No message data to graph"}}) %></h4>
+              </div>
+
+              <div class="mini-stat-icon avatar-sm rounded-circle bg-primary align-self-center">
+                  <span class="avatar-title">
+                      <i class="fal fa-comment-alt-smile"></i>
+                  </span>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="row">
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        <p><b>Links:</b><br /><a href="/impersonate">Impersonate</a><br /><a href="/sidekiq">Sidekiq</a></p>
+        <%= collection_select(:post, :user_id, User.all.order(created_at: :desc), :id, :email, {selected: @user&.id, prompt: true}, { data: {controller: 'admin', action: 'admin#load' }}) %>
+        <% if @user %>
+          <p class="lead my-5">
+            User <%= @user.email %> signed up at <%= @user.created_at %> and has set up <%= @user.account.surveys.count %> surveys which has <%= @user.account.surveys.flat_map{|s| s.visits.size}.reduce %> visits.
+          </p>
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Userveys</title>
+    <meta name="turbolinks-cache-control" content="no-cache">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbo-track': 'reload' %>
+    <script src="https://kit.fontawesome.com/57a3eebe4d.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+</head>
+
+  <body data-sidebar="dark">
+    <!-- Wrapper-->
+    <%= flash_messages %>
+    <div id="layout-wrapper">
+
+        <!-- Navigation -->
+        <%= render 'layouts/topnavbar' %>
+        <%= render 'layouts/navigation' %>
+
+        <!-- Page wraper -->
+        <div class="main-content">
+
+            <div class="page-content">
+                <div class="container-fluid">
+                  <%= yield %>
+                </div>
+            </div>
+            <%= render 'layouts/footer' %>
+        </div>
+
+            <!-- Footer -->
+
+        </div>
+        <!-- End page wrapper-->
+
+
+    <!-- End wrapper-->
+<script>
+  !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on","addSourceMiddleware","addIntegrationMiddleware","setAnonymousId","addDestinationMiddleware"];analytics.factory=function(e){return function(){var t=Array.prototype.slice.call(arguments);t.unshift(e);analytics.push(t);return analytics}};for(var e=0;e<analytics.methods.length;e++){var key=analytics.methods[e];analytics[key]=analytics.factory(key)}analytics.load=function(key,e){var t=document.createElement("script");t.type="text/javascript";t.async=!0;t.src="https://cdn.segment.com/analytics.js/v1/" + key + "/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(t,n);analytics._loadOptions=e};analytics._writeKey="d7Ji7DXyfa192C1Ne8seOUBpZtXWZ5QR";analytics.SNIPPET_VERSION="4.13.2";
+  analytics.load("d7Ji7DXyfa192C1Ne8seOUBpZtXWZ5QR");
+  analytics.page();
+  }}();
+</script>
+<script>
+window.eagerapp = (window.eagerapp || { queue: [], setup: function(x) { window.eagerapp.queue.push(x); } });
+window.eagerapp.setup({
+  "app": "help_widgets",
+  "id": "27-ab79a5e1-1e6d-44b6-9823-79d5e467779d",
+  "config": {
+    "language": {}
+  }
+});
+</script>
+<script src="https://cdn-widgets.eagerapp.net/widget/v1/loader.js" async></script>
+
+  </body>
+</html>

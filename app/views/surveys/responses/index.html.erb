@@ -1,0 +1,63 @@
+<%= content_for :header_content do %>
+  <%= link_to survey_path(@survey), class: 'd-inline-block', data: {toggle: 'tooltip'}, title: 'Back to Survey' do %>
+    <h6><i class="fal fa-arrow-left mr-2"></i></h6>
+  <% end %>
+  <h5 class="d-inline-block ml-1 mr-5"><%= @survey.name %>'s Responses</h5>
+<% end %>
+
+<div class="row">
+                            <div class="col-12">
+                                <!-- Left sidebar -->
+                                <div class="email-leftbar card" style="padding-top: 0;">
+                                    <h5 class="card-header bg-transparent border-bottom text-uppercase ">Folders</h5>
+                                    <div class="mail-list mt-4">
+                                        <a href="?" class="<%= 'active' if params[:view].blank? %>"><i class="fal fa-envelope"></i> Inbox</a>
+                                        <a href="?view=conversations" class="<%= 'active' if params[:view] == 'conversations' %>"><i class="fal fa-mail-bulk"></i> Conversations</a>
+                                        <a href="?view=no_info"><i class="fal fa-comment-slash"></i> No Contact Information</a>
+                                    </div>
+
+                                </div>
+                                <!-- End Left sidebar -->
+
+
+                                <!-- Right Sidebar -->
+                                <div class="email-rightbar mb-3">
+
+                                    <div class="card">
+                                      <h5 class="card-header bg-transparent border-bottom text-uppercase ">Responses</h5>
+
+                                        <ul class="message-list">
+                                            <% @responses.each do |survey_response| %>
+                                              <li>
+                                                  <div class="col-mail col-mail-1">
+                                                      <div style="margin-left: 50px;">
+                                                        <% if survey_response.video_asset.present? %>
+                                                          <span><i class="fal fa-video"></i></span>
+                                                        <% else %>
+                                                          <span><i class="fal fa-comment-alt-lines"></i></span>
+                                                        <% end %>
+
+                                                      </div>
+                                                      <a href="<%= response_path(survey_response) %>" class="title"><%= survey_response.email %></a>
+                                                  </div>
+                                                  <div class="col-mail col-mail-2">
+                                                      <a href="<%= response_path(survey_response) %>" class="subject">Survey "<%= survey_response.survey.name %>" – <span class="teaser"><%= survey_response.survey_type&.titleize %></span>
+                                                      </a>
+                                                      <div class="date" style="padding-left: 0;"><%== local_time_ago(survey_response.created_at) %></div>
+                                                  </div>
+                                              </li>
+                                            <% end %>
+
+                                        </ul>
+
+                                    </div> <!-- card -->
+
+                                    <div class="float-right mt-4">
+                                      <%== pagy_bootstrap_nav(@pagy) %>
+                                    </div>
+
+                                </div> <!-- end Col-9 -->
+
+                            </div>
+
+                        </div>

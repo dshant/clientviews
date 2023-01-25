@@ -1,0 +1,19 @@
+
+
+<footer class="footer">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col" style="background-color: red;color: white;">
+          <% if current_user != true_user %>
+            You (<%= true_user.email %>) are signed in as <%= current_user.email %>
+            <%= link_to "Back to admin", stop_impersonating_impersonate_index_path, method: :post, style: 'color: white;' %>
+          <% end %>
+        </div>
+      </div>
+        <div class="row">
+            <div class="col-sm-6">
+                2014-2021 © Succinct Software LLC.
+            </div>
+        </div>
+    </div>
+</footer>

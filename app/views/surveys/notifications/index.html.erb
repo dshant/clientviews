@@ -1,0 +1,108 @@
+<%= content_for :header_content do %>
+  <%= link_to survey_path(@survey), class: 'd-inline-block', data: {toggle: 'tooltip'}, title: 'Back to Survey' do %>
+    <h6><i class="fal fa-arrow-left mr-2"></i></h6>
+  <% end %>
+  <h5 class="d-inline-block ml-1 mr-5"><%= @survey.name %>'s Notification Settings</h5>
+<% end %>
+
+<div class="row">
+  <div class="col-12">
+      <div class="card">
+        <h5 class="card-header bg-transparent border-bottom text-uppercase ">Email</h5>
+        <div class="card-body">
+          <p><b>Default email address:</b> <%= current_user.account.users.order(created_at: :asc).first.email %></p>
+          <%= form_with model: @survey, url: survey_notifications_path(@survey), method: :post do |form| %>
+            <div class="form-group row mb-4">
+              <div class="col-sm-8">
+                <%= form.fields_for :survey_notification_emails do |survey_notification_email| %>
+                  <%= render 'survey_notification_email_fields', f: survey_notification_email %>
+                <% end %>
+                <div class="links">
+                  <%= link_to_add_association '➕ Add Email', form, :survey_notification_emails, {class: 'btn btn-outline-secondary'} %>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row mb-4">
+              <%= form.submit 'Save', class: 'btn btn-secondary' %>
+            </div>
+          <% end %>
+
+        </div>
+      </div>
+
+      <div class="card">
+        <h5 class="card-header bg-transparent border-bottom text-uppercase ">Slack</h5>
+        <div class="card-body">
+          <div class="row py-2">
+               <div class="col">
+                 <p><b>Slack Settings: </b></p>
+                 <% if current_user.account.slack.blank? %>
+                 <%= link_to user_slack_omniauth_authorize_path(state: current_user.account.id, post_redirect: request.env['PATH_INFO']), class: 'btn btn-outline-primary', method: :post do %>
+                    Authorize Slack <i class="fab fa-slack"></i>
+                  <% end %>
+                 <% elsif @slack_auth_error %>
+                  Please re-authorize Slack: <%= link_to user_slack_omniauth_authorize_path(state: current_user.account.id, post_redirect: request.env['PATH_INFO']), class: 'btn btn-outline-primary', method: :post do %>
+                    Authorize Slack <i class="fab fa-slack"></i>
+                  <% end %>
+                 <% elsif @slack_errors %>
+                   Error Connecting to slack, contact support!
+                 <% else %>
+                    <%= form_with model: @survey, url: survey_notifications_path(@survey), method: :post do |f| %>
+                      <div class="float-right">
+                        <%= link_to "Remove Slack", slack_delete_survey_notifications_url(@survey), method: :delete, class: 'btn btn-outline btn-outline-danger' %>
+                      </div>
+                       <p>Slack Account: <a href="slack://open?team=<%= current_user.account.slack.settings.dig('team_id') %>"> <%= current_user.account.slack.settings.dig('team_name') %> <i class="ml-2 fas fa-external-link-alt"></i></a></p>
+                        <%= f.label :notification_slack_channel, "Channel to Send Response Notifications to:" %>
+                        <%= select_tag("survey[notification_slack_channel]",options_from_collection_for_select(@channels, 'id', 'name', f.object&.notification_slack_channel), prompt: "Do not send",class: 'form-control') %>
+                        <div class="form-group row my-4">
+                          <%= f.submit 'Save', class: 'btn btn-secondary' %>
+                        </div>
+                    <% end %>
+                 <%  end %>
+               </div>
+             </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h5 class="card-header bg-transparent border-bottom text-uppercase ">Zapier</h5>
+        <div class="card-body">
+          <div class="row py-2">
+               <div class="col">
+                 <% if @survey.zaps.blank? %>
+                    <p>To export Survey Response to Zapier follow this <a target="_blank" href="https://zapier.com/developer/public-invite/150311/af471e1db27f3c520e3d448298da698b/">link <i class="fad fa-external-link"></i></a> and use the API Key <code><%= current_user.account.api_keys.first.api_key %></code>.
+                 <% else %>
+                    <p>You have at least one Zap setup in Zapier to export responses, you can manage your Zaps in your <a target="_blank" href="https://zapier.com/app/zaps">Zapier Panel <i class="fad fa-external-link"></i></a>
+                 <%  end %>
+               </div>
+             </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h5 class="card-header bg-transparent border-bottom text-uppercase ">Webhooks</h5>
+        <div class="card-body">
+          <div class="row py-2">
+               <div class="col">
+                 <% if @survey.webhooks.present? %>
+                    <div>
+                      <ul>
+                        <% @survey.webhooks.each do |wh| %>
+                          <li><%= wh.name %> - <%= link_to "Edit", edit_survey_response_webhook_path(wh.survey, wh) %> | <%= link_to "Delete", survey_response_webhook_path(wh.survey, wh), method: 'delete', data: {confirm: 'Are you sure?'} %></li>
+                        <% end %>
+                      </ul>
+                    </div>
+                 <%  end %>
+                 <div>
+                   <%= link_to new_survey_response_webhook_path(@survey), class: 'btn btn-outline-primary' do %>
+                     New Webhook <i class="fab fa-hook"></i>
+                   <% end %>
+                 </div>
+               </div>
+             </div>
+        </div>
+      </div>
+
+  </div>
+
+</div>

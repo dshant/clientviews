@@ -1,0 +1,38 @@
+<div class="col" data-reply-id="<%= @reply.id %>">
+  <div class="card">
+    <h1 class="card-header">Conversation</h1>
+  </div>
+  <% @reply.response.replies.each do |convo| %>
+    <div class="card">
+
+        <div class="card-body">
+          <div class="media mb-4">
+              <div class="media-body">
+                  From<!-- <h5 class="font-size-14 mt-1">Humberto D. Champion</h5> -->
+                  <div class="float-right date text-muted font-weight-light">
+                    <small>
+                      <%== local_time_ago(convo.created_at) %>
+                    </small>
+                  </div>
+                  <small class="text-muted"><%= convo.from.email %></small>
+              </div>
+          </div>
+          <% if convo.source == 'userveys' %>
+            <p><%== convo.message %></p>
+          <% else %>
+            <p><%== convo.message %></p>
+          <% end %>
+        </div>
+    </div>
+  <% end %>
+  <div class="card">
+    <h1 class="card-header">Add your Reply</h1>
+    <div class="card-body">
+      <%= form_with url: response_reply_respond_path(@reply.response, @reply), method: :post, class: 'clearfix', id: 'reply_form' do |f| %>
+
+        <%= f.rich_text_area :message %>
+        <%= f.submit "Send Response", class: 'btn btn-primary my-3' %>
+      <% end %>
+    </div>
+  </div>
+</div>

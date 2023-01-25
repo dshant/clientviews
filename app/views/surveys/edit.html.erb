@@ -1,0 +1,31 @@
+<%= content_for :header_content do %>
+  <%= link_to dashboard_index_path, class: 'd-inline-block', data: {toggle: 'tooltip'}, title: 'Back to Dashboard' do %>
+    <h6><i class="fal fa-arrow-left mr-2"></i></h6>
+  <% end %>
+  <h5 class="d-inline-block ml-1 mr-5">Edit: <%= @survey.name %></h5>
+
+<% end %>
+
+<%= content_for :header_actions do %>
+  <%= link_to survey_path(@survey), class: 'd-inline-block btn btn-dark btn-label' do %>
+    <i class="fal fa-share label-icon"></i>Share
+  <% end %>
+  <%= link_to survey_responses_path(@survey), class: 'd-inline-block btn btn-dark btn-label' do %>
+    <i class="fal fa-comment-alt-smile label-icon"></i>Responses
+  <% end %>
+  <%= link_to survey_path(@survey), method: 'delete', data: {confirm: 'Are you sure?'}, class: 'd-inline-block btn btn-danger btn-label' do %>
+    <i class="fal fa-trash label-icon"></i>Delete
+  <% end %>
+<% end %>
+
+<div class="row">
+  <div class="col col-lg-8">
+    <%= render partial: 'form', locals: {survey: @survey} %>
+  </div>
+  <div class="col col-lg-4">
+    <h4 class="card-header mt-0" style="margin-bottom: -.75rem;">Preview</h4>
+    <div id="preview_container">
+      <%= render partial: 'preview' %>
+    </div>
+  </div>
+</div>

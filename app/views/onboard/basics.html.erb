@@ -1,0 +1,116 @@
+
+<%= content_for :header_actions_style do %>
+width: 60vw;
+<% end %>
+<%= content_for :header_actions do %>
+<ul class="progress-tracker progress-tracker--text progress-tracker--text-inline progress-tracker--spaced">
+  <li class="progress-step is-active">
+    <div class="progress-text">
+      <h4 class="progress-title">Basics</h4>
+    </div>
+    <div class="progress-marker"  data-text='1'></div>
+  </li>
+  <li class="progress-step ">
+    <div class="progress-text">
+      <h4 class="progress-title">Personalization</h4>
+    </div>
+    <div class="progress-marker" data-text='2'></div>
+  </li>
+  <li class="progress-step ">
+    <div class="progress-text">
+      <h4 class="progress-title">Finalize</h4>
+    </div>
+    <div class="progress-marker" data-text='3'></div>
+  </li>
+</ul>
+<% end %>
+
+<div class="row">
+  <div class="col">
+    <%= form_with model: @survey, url: onboard_update_path(@survey, next: 'personal', current: 'basics'), method: :put, data: {controller: "survey-form", survey_form_id_value: dom_id(@survey)} do |form| %>
+    <div class="card">
+        <h4 class="card-header mt-0">Basic Details</h4>
+        <div class="card-body" >
+          <p class="lead">Let's get you started with the basics for your new Userveys!</p>
+
+        <% if @survey.errors.any? %>
+            <div class="error_explanation">
+              <h4>
+                <%= "#{pluralize(@survey.errors.count, "error")} prohibited this route from being saved:" %>
+              </h4>
+              <ul>
+          <% @survey.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+            </div>
+        <% end %>
+        <div class="form-group row mb-4">
+            <%= form.label :name, 'Nickname', class: 'col-sm-3 col-form-label' %>
+            <div class="col-sm-9">
+              <p class="text-muted my-0">
+                  Enter an easy name to remember to identify the different surveys you set up.
+              </p>
+              <%= form.text_field :name, class: 'form-control' %>
+            </div>
+        </div>
+
+        <div class="form-group row mb-4">
+            <%= form.label :position, 'Location Type', class: 'col-sm-3 col-form-label' %>
+            <div class="col-sm-9">
+              <p class="text-muted my-0">
+                  Chose between a modal with a whole page overlay or a widget in the corner of the screen (like a support widget)
+              </p>
+              <%= form.select :position, [['Modal (centered horizontally and vertically)','modal'],['Widget (Bottom Right)', 'widget w-bt-r'], ['Widget (Bottom Left)', 'widget w-bt-l'], ['Widget (Top Right)', 'widget w-tp-r'], ['Widget (Top Left)', 'widget w-tp-l']],{:prompt => true}, class: 'form-control' %>
+            </div>
+        </div>
+
+        <div class="form-group row mb-4">
+            <%= form.label :border_color, 'Border Color', class: 'col-sm-3 col-form-label' %>
+            <div class="col-sm-9">
+              <p class="text-muted my-0">
+                  Choose a color for the top border on the survey (if no color is chosen, a nice <b style="color: #1da1f2;">blue</b> will be used)
+              </p>
+              <style>::-webkit-color-swatch-wrapper:after{content: '▼'}</style>
+              <%= form.color_field :border_color, value: form.object.border_color || '#1da1f2', class: 'form-color', style: '' %>
+            </div>
+        </div>
+
+        <div class="form-group row mb-4">
+            <%= form.label :survey_type, class: 'col-sm-3 col-form-label' %>
+            <div class="col-sm-9">
+              <p class="text-muted my-0">
+                  Choose the type of prompt that will shown to the user.
+              </p>
+              <%= form.select :survey_type, [['Counter Scale(e.g. NPS)','scale'], ['Rating', 'rating'],['Freeform text', 'freeform'], ['Scale WITH freeform text','scale_w_text'], ['Rating WITH freeform text','rating_w_text']],{:prompt => true}, class: 'form-control', data: {action: "survey-form#change survey-form#preview"} %>
+            </div>
+        </div>
+          <div class="form-group row mb-4 <%= 'd-none' unless form.object.survey_type == 'scale' %>" data-survey-form-target="scale">
+              <%= form.label :counter_max, class: 'col-sm-3 col-form-label' %>
+              <div class="col-sm-9">
+                <p class="text-muted my-0">
+                    Choose either a 1-5 or 1-10 scale. Defaults to '1-5'.
+                </p>
+                <%= form.select :counter_max, [['1-5',5], ['1-10', 10]],{}, class: 'form-control', data: {action: 'survey-form#preview'} %>
+              </div>
+          </div>
+          <div class="form-group row mb-4 <%= 'd-none' unless form.object.survey_type == 'rating' %>" data-survey-form-target="rating">
+              <%= form.label :rating_icon, class: 'col-sm-3 col-form-label' %>
+              <div class="col-sm-9">
+                <p class="text-muted my-0">
+                    Choose a star (&star;) or heart (&#x2661;) as the rating icon. Defaults to "stars".
+                </p>
+                <%= form.select :rating_icon, [['Stars (☆)', 'stars'], ['Hearts (♡)', 'hearts']], {}, class: 'form-control', data: {action: 'survey-form#preview'} %>
+              </div>
+          </div>
+      </div>
+    </div>
+    <div class="my-5">
+        <%= form.submit "Next", class: 'btn btn-primary w-md' %>
+
+        <%= link_to "Skip", dashboard_index_path, class: 'btn btn-outline-secondary float-right' %>
+    </div>
+    <% end %>
+
+  </div>
+</div>

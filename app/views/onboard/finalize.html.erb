@@ -1,0 +1,107 @@
+
+<%= content_for :header_actions_style do %>
+width: 60vw;
+<% end %>
+<%= content_for :header_actions do %>
+<ul class="progress-tracker progress-tracker--text progress-tracker--text-inline progress-tracker--spaced">
+  <li class="progress-step is-complete">
+    <div class="progress-text">
+      <h4 class="progress-title">Basics</h4>
+    </div>
+    <div class="progress-marker" data-text='1'></div>
+  </li>
+  <li class="progress-step is-complete">
+    <div class="progress-text">
+      <h4 class="progress-title">Personalization</h4>
+    </div>
+    <div class="progress-marker" data-text='2'></div>
+  </li>
+  <li class="progress-step is-active">
+    <div class="progress-text">
+      <h4 class="progress-title">Finalize</h4>
+    </div>
+    <div class="progress-marker" data-text='3'></div>
+  </li>
+</ul>
+<% end %>
+
+<div class="row">
+  <div class="col">
+    <%= form_with model: @survey, url: onboard_update_path(@survey, next: 'finished', current: 'finalize'), method: :put, data: {controller: "survey-form", survey_form_id_value: dom_id(@survey)} do |form| %>
+    <div class="card">
+        <h4 class="card-header mt-0">Survey Details</h4>
+        <div class="card-body" >
+
+
+        <% if @survey.errors.any? %>
+            <div class="error_explanation">
+              <h4>
+                <%= "#{pluralize(@survey.errors.count, "error")} prohibited this route from being saved:" %>
+              </h4>
+              <ul>
+          <% @survey.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+            </div>
+        <% end %>
+
+        <div class="form-group row mb-4">
+            <%= form.label :video_feedback_enabled, 'Collect Video Feedback', class: 'col-sm-3 col-form-label' %>
+            <div class="col-sm-9">
+              <p class="text-muted my-0">
+                  Allow your user's to choose video as a feedback medium.
+              </p>
+              <%= form.check_box :video_feedback_enabled, data: {action: 'survey-form#preview'} %>
+            </div>
+        </div>
+        <div class="form-group row mb-4">
+            <%= form.label :email_collect, 'Collect Visitor Email', class: 'col-sm-3 col-form-label' %>
+            <div class="col-sm-9">
+              <p class="text-muted my-0">
+                  Adds an optional text box for the user providing feedback to leave their email address.
+              </p>
+              <%= form.check_box :email_collect, data: {action: 'survey-form#preview'} %>
+            </div>
+        </div>
+        <div class="form-group row mb-4">
+            <%= form.label :trigger_type, 'Trigger Type', class: 'col-sm-3 col-form-label' %>
+            <div class="col-sm-9">
+              <p class="text-muted my-0">
+                  Choose how (if at all) the survey should be triggered automaticaly
+              </p>
+              <%= form.select :trigger_type, [['None (manually trigger from Link/Button/JavaScript)','none'],['Delay (on any visit but after a delay)', 'delay'],['URL (when a visitor lands on a specific page/URL)', 'url']],{}, class: 'form-control', data: {action: "survey-form#changeTrigger"} %>
+            </div>
+        </div>
+        <div class="form-group row mb-4 <%= 'd-none' unless form.object.trigger_type == 'delay' %>" data-survey-form-target="delay">
+            <%= form.label :delay_time, class: 'col-sm-3 col-form-label' %>
+            <div class="col-sm-9">
+              <p class="text-muted my-0">
+                  Choose a delay in minutes, hours or days.
+              </p>
+              <%= form.text_field :delay_time_number, {class: 'form-control w-25 d-inline'} %>
+              <%= form.select :delay_time_interval, options_for_select([['Seconds','seconds'],['Minutes','minutes'], ['Hours', 'hours'], ['Days', 'days']]), {},  class: 'form-control w-25 d-inline' %>
+            </div>
+        </div>
+        <div class="form-group row mb-4 <%= 'd-none' unless form.object.trigger_type == 'url' %>" data-survey-form-target="url">
+          <div class="col-sm-8 offset-sm-4">
+            <%= form.fields_for :survey_trigger_urls do |survey_trigger_url| %>
+              <%= render 'surveys/survey_trigger_url_fields', f: survey_trigger_url %>
+            <% end %>
+            <div class="links">
+              <%= link_to_add_association '➕ Add URL', form, :survey_trigger_urls, {partial: 'surveys/survey_trigger_url_fields'},  {class: 'btn btn-outline-light btn-block'} %>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="my-5">
+        <%= link_to "Back", onboard_back_path(destination: 'personal', survey_id: @survey.id), class: 'btn btn-secondary' %>
+        <%= form.submit "Finish", class: 'btn btn-primary w-md' %>
+
+    </div>
+    <% end %>
+
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<p class="my-4">Hi there!</p>
+
+<p class="my-4">You have a new reply in the conversation with <%= @reply&.from&.email %> on your survey named <%= @reply&.response&.survey&.name %></p>
+
+<div class=" mb-5" style="border-left: gray solid 5px">
+  <blockquote class="blockquote">
+    <p><%== @reply.message %><p>
+    </blockquote>
+</div>
+
+<div class="" style=''>
+  <%= link_to "Click to Reply", response_url(@reply.response), class: 'btn btn-secondary btn-lg w-full' %>
+</div>
