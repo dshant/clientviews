@@ -20,7 +20,8 @@ Rails.application.routes.draw do
     end
   end
 
-  devise_for :users, controllers: { registrations: 'registrations', omniauth_callbacks: 'users/omniauth_callbacks' }
+  devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
+
   get 'dashboard/index'
   get 'billing', to: 'billing#index'
   mount StripeEvent::Engine, at: '/stripe/event'
