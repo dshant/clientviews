@@ -1,6 +1,6 @@
-class Admin::AdminController < ApplicationController
+class AdminController < ApplicationController
 
-  def info
+  def index
     unless params[:user_id].blank?
       @user = User.find(params[:user_id])
     end

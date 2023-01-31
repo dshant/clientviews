@@ -11,9 +11,10 @@ Rails.application.routes.draw do
   constraints CanAccessFlipperUI do
     mount Sidekiq::Web => '/sidekiq'
     # mount Flipper::UI.app(FLIPPER) => '/flipper'
-    namespace :admin do
-      get '/', to: 'admin#info'
-    end
+    # namespace :admin do
+    #   get '/', to: 'admin#info'
+    # end
+    resources :admin, only: [:index]
     resources :impersonate, only: [:index] do
       post :impersonate, on: :member
       post :stop_impersonating, on: :collection
