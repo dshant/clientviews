@@ -4,8 +4,8 @@ require_relative '../webhooks_receiver/app'
 Rails.application.routes.draw do
   mount WHA, at: '/wha' if Rails.env.development?
   
-  match "/404", to: "errors#not_found", via: :all
-  match "/500", to: "errors#internal_server_error", via: :all
+  # match "/404", to: "errors#not_found", via: :all
+  # match "/500", to: "errors#internal_server_error", via: :all
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
   constraints CanAccessFlipperUI do
