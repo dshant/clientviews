@@ -10,7 +10,7 @@
   <%= link_to survey_path(@response.survey), class: 'd-inline-block btn btn-dark btn-label' do %>
     <i class="fal fa-comment-alt-smile label-icon"></i>Survey
   <% end %>
-  <%= link_to api_v1_survey_response_path(@response.survey, @response), method: 'delete', data: {confirm: 'Are you sure?'}, class: 'd-inline-block btn btn-danger btn-label' do %>
+  <%= link_to response_path(@response), method: 'delete', data: {confirm: 'Are you sure?'}, class: 'd-inline-block btn btn-danger btn-label' do %>
     <i class="fal fa-trash label-icon"></i>Delete
   <% end %>
 <% end %>
