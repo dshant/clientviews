@@ -87,7 +87,8 @@
           <div class="media">
               <div class="media-body">
                   <p class="text-muted fw-medium">Survey Responses Conversion</p>
-                  <h4 class="mb-0"><%= @survey.responses.empty? ? 0 : ((@survey.responses.size / @survey.visits.pluck(:visitor_token).uniq.size.to_f) * 100).truncate(2) %>%</h4>
+                  <% visitor_tokens_count = @survey.visits.pluck(:visitor_token).uniq.size.to_f %>
+                  <h4 class="mb-0"><%= @survey.responses.empty? ? 0 : visitor_tokens_count == 0.0 ? 0.0 : ((@survey.responses.size / visitor_tokens_count) * 100).truncate(2) %>%</h4>
               </div>
 
               <div class="mini-stat-icon avatar-sm rounded-circle bg-primary align-self-center">
