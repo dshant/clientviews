@@ -5,7 +5,7 @@
     "@babel/preset-react": "^7.12.13",
     "@nathanvda/cocoon": "^1.2.14",
     "@rails/actioncable": "^6.0.0",
-    "@rails/actiontext": "^6.1.1",
+    "@rails/actiontext": "^7.2.302",
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "5.4.3",
@@ -17,7 +17,7 @@
     "jquery": "^3.5.1",
     "jquery-serializejson": "^3.2.1",
     "local-time": "^2.1.0",
-    "lodash-es": "^4.17.20",
+    "lodash-es": "^4.18.1",
     "micromodal": "^0.4.6",
     "popper.js": "^1.16.1",
     "progress-tracker": "^2.0.6",
@@ -29,7 +29,7 @@
     "stimulus": "^2.0.0",
     "styled-components": "^5.2.1",
     "toastr": "^2.1.4",
-    "trix": "^1.2.0",
+    "trix": "^2.1.19",
     "turbolinks": "^5.2.0"
   },
   "version": "0.1.0",
@@ -44,7 +44,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "prettier": "^2.2.1",
     "webpack-bundle-analyzer": "^4.4.0",
-    "webpack-dev-server": "^3.11.2"
+    "webpack-dev-server": "^5.2.6"
   },
   "scripts": {
     "webpack:analyze": "yarn webpack:build_json && yarn webpack:analyze_json",
